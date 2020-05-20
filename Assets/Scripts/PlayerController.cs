@@ -12,6 +12,11 @@ public class PlayerController : MonoBehaviour
     private Rigidbody rb;
     private int score = 0;
     public Text scoreText;
+    public Text healthText;
+    public Text WinLoseText;
+    public Image WinLoseBG;
+    public GameObject winOrLose;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -20,6 +25,10 @@ public class PlayerController : MonoBehaviour
     }
     void FixedUpdate()
     {
+        if(Input.GetKey(KeyCode.Escape))
+        {
+            SceneManager.LoadScene("Menu");
+        }
         // Get info from User to move in the X and Y axis
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
@@ -41,25 +50,56 @@ public class PlayerController : MonoBehaviour
         if(other.gameObject.CompareTag("Trap"))
         {
             health--;
+            SetHealthText();
             other.gameObject.SetActive(true);
-            Debug.Log("Health: " + health.ToString());
+            // Debug.Log("Health: " + health.ToString());
         }
         if(other.gameObject.CompareTag("Goal"))
         {
+            Setwintext();
             other.gameObject.SetActive(true);
-            Debug.Log("You win!");
+            StartCoroutine(LoadScene(3));
+            // Debug.Log("You win!");
         }
+    }
+    IEnumerator LoadScene(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        SceneManager.LoadScene(0);
     }
     void Update()
     {
         if(health == 0)
         {
-            Debug.Log("Game Over!");
-            SceneManager.LoadScene(0);
+            // Debug.Log("Game Over!");
+            StartCoroutine(LoadScene(3));
+            Setloosetext();
+            // SceneManager.LoadScene(0);
         }
     }
+    
     void SetScoreText()
     {
-    scoreText.text = "Count: " + score.ToString();
+        scoreText.text = "Score: " + score.ToString();
+    }
+    void SetHealthText()
+    {
+        healthText.text = "Health: " + health.ToString();
+    }
+    void Setwintext()
+    {
+        winOrLose.SetActive(true);
+        WinLoseBG.color = Color.green;
+        WinLoseText.color = Color.black;
+        WinLoseText.text = "You Win!";
+
+    }
+    void Setloosetext()
+    {
+        winOrLose.SetActive(true);
+        WinLoseBG.color = Color.red;
+        WinLoseText.color = Color.white;
+        WinLoseText.text = "Game Over!";
+
     }
 }
