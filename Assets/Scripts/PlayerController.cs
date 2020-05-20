@@ -27,7 +27,7 @@ public class PlayerController : MonoBehaviour
     {
         if(Input.GetKey(KeyCode.Escape))
         {
-            SceneManager.LoadScene("Menu");
+            SceneManager.LoadScene("menu");
         }
         // Get info from User to move in the X and Y axis
         float horizontalInput = Input.GetAxis("Horizontal");
